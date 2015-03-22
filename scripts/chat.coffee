@@ -11,13 +11,16 @@ module.exports = (robot) ->
    request = require('request')
    parser  = require 'xml2json'
    uri = "http://b.hatena.ne.jp/entrylist/#{category}?mode=rss"
+   #httpリクエストで要素を取得する
    request.get(uri, (error, response, body) ->
     if error or response.statusCode != 200
       return msg.send('fail to article')
-    
+
+    #xmlをjsonに変換
     json = parser.toJson(body, { object : true })
     
     counter = 0
+    #要素に分けて表示
     for result in json['rdf:RDF']['item']
       text = text + "#{result.title}\n\n"
       text = text + "#{result.link}\n\n"
